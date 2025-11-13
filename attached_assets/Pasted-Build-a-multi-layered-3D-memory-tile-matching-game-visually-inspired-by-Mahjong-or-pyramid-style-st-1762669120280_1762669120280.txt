@@ -1,0 +1,140 @@
+Build a multi-layered 3D memory tile matching game, visually inspired by Mahjong or pyramid-style stacking puzzles.
+The player must flip and match tiles layer by layer, progressing only when each layer is cleared.
+The game should be interactive, animated, and visually appealing with smooth transitions.
+
+🧱 1. Game Structure
+
+The game board should consist of multiple layers of tiles, stacked one above another in a pyramid or tower formation.
+
+Each layer should have a grid layout, smaller as the stack goes upward (e.g., bottom layer 6x6, above 4x4, etc.).
+
+Tiles in the upper layers partially cover the ones below (like Mahjong or 3D stacking).
+
+Layers should be rendered with slight 3D depth or shadow effects to make the hierarchy visually clear.
+
+🧩 2. Tile Mechanics
+
+Every tile must have a hidden state at the start of the game.
+
+When a player clicks on a tile, it should flip with an animation to reveal an image (e.g., flower, fruit, shape, or symbol).
+
+When two tiles are revealed:
+
+If they match, both tiles disappear (fade or slide out).
+
+If they don’t match, they flip back after a short delay.
+
+Each tile image should have exactly one matching pair within its layer.
+
+🔒 3. Layer Unlocking Logic
+
+The player can only interact with the topmost visible layer at any given time.
+
+Tiles from lower layers should remain inactive (non-clickable) until all tiles in the current layer are matched and removed.
+
+Once the current layer is cleared:
+
+The next layer becomes active and tiles from it are revealed as new playable elements.
+
+A short transition animation or unlock effect should indicate progress.
+
+📊 4. Scoring & Tracking
+
+Include a counter to track how many tiles the player has flipped (moves count).
+
+Optionally, display a timer that starts when the player flips the first tile.
+
+Show stats at the end (e.g., total moves, time taken, layers cleared).
+
+Optionally, assign bonus points for clearing layers quickly or matching tiles consecutively without mistakes.
+
+🎨 5. Visual & UI Design
+
+Use a bright, minimalistic color palette with soft shadows and clean UI elements.
+
+Tiles should have:
+
+Rounded edges
+
+Subtle shadows for layering
+
+Clear, colorful icons or illustrations
+
+The layout should adjust dynamically for various screen sizes (desktop and mobile).
+
+Add a background gradient or texture to make the layers stand out.
+
+🧠 6. User Interface Components
+
+Start Screen: Game title, “Start Game” button, and difficulty options (Easy / Medium / Hard).
+
+HUD (Heads-Up Display):
+
+Move counter
+
+Timer
+
+“Restart” button
+
+“Layer progress” indicator (e.g., “Layer 2 of 5”)
+
+End Screen: Congratulatory message with score summary and “Play Again” button.
+
+🎬 7. Animation & Interaction
+
+Smooth flip animation for tile reveal and hide.
+
+Fade-out or pop animation for matched tiles.
+
+Unlock animation when a new layer is activated (e.g., glowing effect or upward fade).
+
+Include soft sound effects for flips, matches, and layer unlocks (optional but recommended).
+
+⚙️ 8. Technical / Implementation Notes
+
+You can implement this using any of the following:
+
+Web (JavaScript / TypeScript) → Use React + Three.js or Pixi.js for 3D effects.
+
+Python → Use Pygame or Godot (Python bindings).
+
+Unity / Unreal Engine → For a full 3D version with tile physics.
+
+Core Data Structure:
+
+Store each layer as a 2D array of tiles.
+
+Maintain a global state to track:
+
+Active layer index
+
+Matched tiles per layer
+
+Total moves
+
+Timer
+
+Logic flow:
+
+Start Game → Generate Layer 1 → Flip Tiles → Match Check → Remove Tiles → 
+If Layer Cleared → Unlock Next Layer → Repeat → End when all layers cleared.
+
+💡 Optional Enhancements
+
+Add a “hint” feature that briefly highlights possible matches.
+
+Include background music that changes as layers progress.
+
+Add difficulty modes:
+
+Easy: Fewer layers, fewer tiles per layer
+
+Medium: More tiles and faster timer
+
+Hard: Complex layout, more tile types
+
+Allow save/load progress.
+
+🏁 End Goal
+
+A polished, layered, interactive memory puzzle game where players progress by matching all tiles in each layer, unlocking deeper levels, with visual satisfaction and increasing difficulty — blending the simplicity of a memory game with the strategy of Mahjong.
