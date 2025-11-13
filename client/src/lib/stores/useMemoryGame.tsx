@@ -184,7 +184,7 @@ export const useMemoryGame = create<GameState>()(
       console.log("Initializing game with difficulty:", difficulty);
       const config = getDifficultyConfig(difficulty);
 
-      let assignmentPool: TileAssignment[] | null = null;
+      let pairPool: TileAssignment[][] | null = null;
 
       if (difficulty === "easy") {
         const requiredPairs = EASY_REQUIRED_MAPPINGS.map(({ displayValue, note }) => {
@@ -207,37 +207,52 @@ export const useMemoryGame = create<GameState>()(
           );
         }
 
-        const assignments: TileAssignment[] = [];
+        const duplicatePair = (pair: TileAssignment): TileAssignment[] => [
+          { ...pair },
+          { ...pair },
+        ];
 
-        const pushPair = (pair: TileAssignment) => {
-          assignments.push({ ...pair }, { ...pair });
-        };
-
-        requiredPairs.forEach(pushPair);
+        const pairs: TileAssignment[][] = requiredPairs.map(duplicatePair);
 
         const remainingPairs = Math.max(0, totalPairs - requiredPairs.length);
         for (let i = 0; i < remainingPairs; i++) {
           const randomIndex = Math.floor(Math.random() * requiredPairs.length);
           const randomPair = requiredPairs[randomIndex];
-          pushPair(randomPair);
+          pairs.push(duplicatePair(randomPair));
         }
 
-        for (let i = assignments.length - 1; i > 0; i--) {
+        for (let i = pairs.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [assignments[i], assignments[j]] = [assignments[j], assignments[i]];
+          [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
         }
 
-        assignmentPool = assignments;
+        pairPool = pairs;
       }
-
-      let assignmentIndex = 0;
 
       const layers: Layer[] = config.layers.map((layerConfig, index) => {
         const totalTilesForLayer = layerConfig.size * layerConfig.size;
-        const layerAssignments = assignmentPool
-          ? assignmentPool.slice(assignmentIndex, assignmentIndex + totalTilesForLayer)
-          : undefined;
-        assignmentIndex += totalTilesForLayer;
+        const pairCountForLayer = totalTilesForLayer / 2;
+
+        let layerAssignments: TileAssignment[] | undefined;
+
+        if (pairPool) {
+          if (pairPool.length < pairCountForLayer) {
+            console.warn(
+              `Not enough pairs available for layer ${index}. Needed ${pairCountForLayer}, but only ${pairPool.length} available.`
+            );
+          }
+
+          const takenPairs = pairPool.splice(0, pairCountForLayer);
+          layerAssignments = takenPairs.flat();
+
+          for (let i = layerAssignments.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [layerAssignments[i], layerAssignments[j]] = [
+              layerAssignments[j],
+              layerAssignments[i],
+            ];
+          }
+        }
 
         return {
           index,
